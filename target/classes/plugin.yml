@@ -1,0 +1,10 @@
+name: LaunchVector3
+version: '1.0'
+main: me.doruk.launchvector3.LaunchVector3
+api-version: '1.21'
+commands:
+  launch:
+    description: Launches a player at a specified angle.
+    usage: /launch <target_selector> <angleX> <angleY>
+    permission: launchvector3.launch
+    permission-message: You don't have permission to use this command.
