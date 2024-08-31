@@ -1,5 +1,6 @@
 package me.doruk.launchvector3.Command;
 
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
@@ -14,20 +15,13 @@ public class LaunchCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (command.getName().equalsIgnoreCase("launch")) {
-            if (args.length != 3) {
-                commandSender.sendMessage("Usage: /launch <target_selector> <angleX> <angleY>");
+            if (args.length != 4) {
+                commandSender.sendMessage(ChatColor.DARK_RED + "Usage: /launch <player|@p> <angleX> <angleY> <angleZ>" + org.bukkit.ChatColor.RESET);
                 return false;
             }
 
             Player target = null;
-            if (args[0].equalsIgnoreCase("@s")) {
-                if (commandSender instanceof Player) {
-                    target = (Player) commandSender;
-                } else {
-                    commandSender.sendMessage("The @s selector can only be used by a player.");
-                    return false;
-                }
-            } else if (args[0].equalsIgnoreCase("@p")) {
+            if (args[0].equalsIgnoreCase("@p")) {
                 target = getNearestPlayer(commandSender);
                 if (target == null) {
                     commandSender.sendMessage("No players found nearby.");
@@ -44,7 +38,8 @@ public class LaunchCommand implements CommandExecutor {
             try {
                 double angleX = Double.parseDouble(args[1]);
                 double angleY = Double.parseDouble(args[2]);
-                Vector launchVector = new Vector(angleX, angleY, 0);
+                double angleZ = Double.parseDouble(args[3]);
+                Vector launchVector = new Vector(angleX, angleY, angleZ);
                 launchVector = launchVector.normalize().multiply(Math.sqrt(angleX * angleX + angleY * angleY));
                 target.setVelocity(launchVector);
                 commandSender.sendMessage("Launched " + target.getName() + " with vector (" + launchVector.getX() + ", " + launchVector.getY() + ", " + launchVector.getZ() + ").");
